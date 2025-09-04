@@ -1,3 +1,6 @@
-# Created by pytest automatically.
+# Environment files
+.env
 *.env
+
+# Pytest cache
 .cache
