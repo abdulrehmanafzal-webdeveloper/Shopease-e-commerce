@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 interface AuthContextType {
   registerUser: (data: any) => Promise<{ ok: boolean; result: any }>;
@@ -15,9 +16,8 @@ interface AuthContextType {
   setUserRole: (role: string | null) => void;
 }
 
-
 const AuthContext = createContext<AuthContextType | null>(null);
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = getApiBaseUrl();
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogged, setIsLogged] = useState(false);
@@ -87,13 +87,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLogged(false);
     setUserId(null);
     setUserRole(null);
-    const session = localStorage.getItem("session_id") || (() => {
+    
+    // Create a new session ID without storing it in a variable
+    (() => {
       const newSession =
         typeof crypto !== "undefined" && crypto.randomUUID
           ? crypto.randomUUID()
           : Math.random().toString(36).slice(2);
       localStorage.setItem("session_id", newSession);
-      return newSession;
     })();
   }, []);
 

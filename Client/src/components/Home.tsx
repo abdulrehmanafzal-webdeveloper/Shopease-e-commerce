@@ -81,13 +81,7 @@ const Home = () => {
     exit: { opacity: 0, y: -20 },
   };
 
-  const stagger = {
-    visible: {
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+ 
 
   return (
     <motion.div

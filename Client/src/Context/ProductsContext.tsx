@@ -197,7 +197,7 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/categories/carousel");
+      const res = await fetch(`${CATEGORY_BASE}/carousel`);
       const data = await res.json();
       const slides: CarouselSlide[] = (data.slides || []).map((s: any) => ({
         id: s.id,
