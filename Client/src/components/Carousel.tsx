@@ -1,9 +1,17 @@
 import { useState, useEffect, memo, useRef } from "react";
-import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { motion, AnimatePresence, useAnimation,type Variant } from "framer-motion";
 import { useProducts } from "../Context/ProductsContext";
 import { FaChevronLeft, FaChevronRight, FaPlay, FaPause } from "react-icons/fa";
 
 const placeholderImage = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
+
+// Define proper types for variants
+interface AnimationVariants {
+  enter: (dir: number) => Variant;
+  center: Variant;
+  exit: (dir: number) => Variant;
+  [key: string]: any; // Add index signature for string keys
+}
 
 const Carousel: React.FC = () => {
   const { fetchCarouselSlides, loading } = useProducts();
@@ -97,8 +105,8 @@ const Carousel: React.FC = () => {
     setTouchEnd(null);
   };
 
-  // Animation variants
-  const variants = {
+  // Animation variants with proper typing
+  const variants: AnimationVariants = {
     enter: (dir: number) => ({
       x: dir > 0 ? "100%" : "-100%",
       opacity: 0.5,
@@ -110,7 +118,7 @@ const Carousel: React.FC = () => {
       opacity: 1,
       scale: 1,
       zIndex: 1,
-      transition: { duration: 0.5, type: "spring" as const, stiffness: 300, damping: 30 }
+      transition: { duration: 0.5, type: "spring", stiffness: 300, damping: 30 }
     },
     exit: (dir: number) => ({
       x: dir > 0 ? "-100%" : "100%",
@@ -157,140 +165,140 @@ const Carousel: React.FC = () => {
 
   return (
     <div
-  ref={carouselRef}
-  className="relative w-full overflow-hidden h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px] shadow-xl group"
-  onMouseEnter={() => setPaused(true)}
-  onMouseLeave={() => setPaused(false)}
-  onTouchStart={handleTouchStart}
-  onTouchMove={handleTouchMove}
-  onTouchEnd={handleTouchEnd}
->
-  {/* Progress bar */}
-  <motion.div
-    className="absolute bottom-0 left-0 h-1 bg-white/70 origin-left z-30"
-    initial={{ scaleX: 0 }}
-    animate={progressAnimation}
-    key={current}
-  />
-  
-  {/* Slides */}
-  <AnimatePresence initial={false} custom={direction} mode="popLayout">
-    {currentSlide && (
+      ref={carouselRef}
+      className="relative w-full overflow-hidden h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px] shadow-xl group"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Progress bar */}
       <motion.div
-        key={currentSlide.id ?? current}
-        className="absolute inset-0 w-full h-full"
-        variants={variants}
-        initial="enter"
-        animate="center"
-        exit="exit"
-        custom={direction}
-      >
-        <div className="relative w-full h-full overflow-hidden">
-          {/* Loading skeleton */}
-          {!currentLoaded && (
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
-          )}
-          
-          {/* Actual image */}
-          <img
-            src={currentSlide.image_url || placeholderImage}
-            alt={currentSlide.sub_category_name || "Sub Category"}
-            className={`w-full h-full object-cover transition-opacity duration-500 ${
-              currentLoaded ? "opacity-100" : "opacity-0"
-            }`}
-            onError={(e) => {
-              e.currentTarget.src = placeholderImage;
-              setLoadedImages((prev) => ({ ...prev, [current]: true }));
-            }}
-            loading="lazy"
-          />
-          
-          {/* Gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-          
-          {/* Caption - adjusted bottom padding to prevent overlap with dots */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 p-4 pb-14 sm:p-6 sm:pb-16 md:p-8 md:pb-16 z-20"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            key={`caption-${current}`}
-          >
-            <h2 className="text-white text-lg sm:text-xl md:text-2xl font-bold mb-2 drop-shadow-lg line-clamp-2">
-              {currentSlide.sub_category_name || "Featured Category"}
-            </h2>
-            {currentSlide.description && (
-              <p className="text-white/90 text-sm md:text-base drop-shadow-md hidden sm:block line-clamp-2">
-                {currentSlide.description}
-              </p>
-            )}
-            {currentSlide.link && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-3 px-4 py-2 bg-white text-black rounded-lg font-medium text-sm md:text-base hover:bg-opacity-90 transition-all"
-              >
-                Explore Now
-              </motion.button>
-            )}
-          </motion.div>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-
-  {/* Control buttons */}
-  <div className="absolute inset-0 flex items-center justify-between p-2 md:p-4">
-    <motion.button
-      whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
-      whileTap={{ scale: 0.9 }}
-      onClick={prevSlide}
-      className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-sm text-white z-40 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-      aria-label="Previous Slide"
-    >
-      <FaChevronLeft className="text-white" />
-    </motion.button>
-    
-    <motion.button
-      whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
-      whileTap={{ scale: 0.9 }}
-      onClick={nextSlide}
-      className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-sm text-white z-40 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-      aria-label="Next Slide"
-    >
-      <FaChevronRight className="text-white" />
-    </motion.button>
-  </div>
-
-  {/* Play/Pause button */}
-  <motion.button
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.9 }}
-    onClick={() => setPaused(!paused)}
-    className="absolute top-4 right-4 z-40 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
-    aria-label={paused ? "Play slideshow" : "Pause slideshow"}
-  >
-    {paused ? <FaPlay size={12} /> : <FaPause size={12} />}
-  </motion.button>
-
-  {/* Dots navigation - improved z-index to ensure it's above caption */}
-  <div className="absolute z-40 flex space-x-2 -translate-x-1/2 bottom-4 left-1/2">
-    {slides.map((_, i) => (
-      <motion.button
-        key={i}
-        onClick={() => goToSlide(i)}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-        className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full border border-white/50 shadow-md transition-all duration-300 ${
-          i === current
-            ? "bg-white scale-110 w-4 md:w-6"
-            : "bg-white/40 hover:bg-white/80"
-        }`}
-        aria-label={`Go to slide ${i + 1}`}
+        className="absolute bottom-0 left-0 h-1 bg-white/70 origin-left z-30"
+        initial={{ scaleX: 0 }}
+        animate={progressAnimation}
+        key={current}
       />
-    ))}
-  </div>
-</div>
+      
+      {/* Slides */}
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        {currentSlide && (
+          <motion.div
+            key={currentSlide.id ?? current}
+            className="absolute inset-0 w-full h-full"
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+          >
+            <div className="relative w-full h-full overflow-hidden">
+              {/* Loading skeleton */}
+              {!currentLoaded && (
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
+              )}
+              
+              {/* Actual image */}
+              <img
+                src={currentSlide.image_url || placeholderImage}
+                alt={currentSlide.sub_category_name || "Sub Category"}
+                className={`w-full h-full object-cover transition-opacity duration-500 ${
+                  currentLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                onError={(e) => {
+                  e.currentTarget.src = placeholderImage;
+                  setLoadedImages((prev) => ({ ...prev, [current]: true }));
+                }}
+                loading="lazy"
+              />
+              
+              {/* Gradient overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              
+              {/* Caption - adjusted bottom padding to prevent overlap with dots */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 p-4 pb-14 sm:p-6 sm:pb-16 md:p-8 md:pb-16 z-20"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                key={`caption-${current}`}
+              >
+                <h2 className="text-white text-lg sm:text-xl md:text-2xl font-bold mb-2 drop-shadow-lg line-clamp-2">
+                  {currentSlide.sub_category_name || "Featured Category"}
+                </h2>
+                {currentSlide.description && (
+                  <p className="text-white/90 text-sm md:text-base drop-shadow-md hidden sm:block line-clamp-2">
+                    {currentSlide.description}
+                  </p>
+                )}
+                {currentSlide.link && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-3 px-4 py-2 bg-white text-black rounded-lg font-medium text-sm md:text-base hover:bg-opacity-90 transition-all"
+                  >
+                    Explore Now
+                  </motion.button>
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Control buttons */}
+      <div className="absolute inset-0 flex items-center justify-between p-2 md:p-4">
+        <motion.button
+          whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+          whileTap={{ scale: 0.9 }}
+          onClick={prevSlide}
+          className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-sm text-white z-40 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Previous Slide"
+        >
+          <FaChevronLeft className="text-white" />
+        </motion.button>
+        
+        <motion.button
+          whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+          whileTap={{ scale: 0.9 }}
+          onClick={nextSlide}
+          className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-sm text-white z-40 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Next Slide"
+        >
+          <FaChevronRight className="text-white" />
+        </motion.button>
+      </div>
+
+      {/* Play/Pause button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setPaused(!paused)}
+        className="absolute top-4 right-4 z-40 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label={paused ? "Play slideshow" : "Pause slideshow"}
+      >
+        {paused ? <FaPlay size={12} /> : <FaPause size={12} />}
+      </motion.button>
+
+      {/* Dots navigation - improved z-index to ensure it's above caption */}
+      <div className="absolute z-40 flex space-x-2 -translate-x-1/2 bottom-4 left-1/2">
+        {slides.map((_, i) => (
+          <motion.button
+            key={i}
+            onClick={() => goToSlide(i)}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full border border-white/50 shadow-md transition-all duration-300 ${
+              i === current
+                ? "bg-white scale-110 w-4 md:w-6"
+                : "bg-white/40 hover:bg-white/80"
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
