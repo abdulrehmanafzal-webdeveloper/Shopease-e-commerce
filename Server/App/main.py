@@ -14,7 +14,7 @@ app = FastAPI(title="E-commerce API", version="1.0.0")
 # CORS middleware
 origins = [
     "http://localhost:5173",       # Local dev
-    "https://yourfrontend.com",    # Production frontend
+    "https://shopease-e-commerce.vercel.app/",    # Production frontend
 ]
 app.add_middleware(
     CORSMiddleware,
