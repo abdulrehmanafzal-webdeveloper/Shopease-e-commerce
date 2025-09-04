@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException,Depends
 from pydantic import BaseModel, EmailStr, field_validator
 import re
-from DB.connection import get_connection
-from Utils import security
-from Utils.dependencies import get_current_user
+from App.DB.connection import get_connection
+from App.Utils import security
+from App.Utils.dependencies import get_current_user
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

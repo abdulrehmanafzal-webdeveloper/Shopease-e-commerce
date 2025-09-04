@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File
 from pydantic import BaseModel
-from DB.connection import get_connection
-from Utils.dependencies import get_current_user
+from App.DB.connection import get_connection
+from App.Utils.dependencies import get_current_user
 from typing import Optional, List, Tuple
 import os
 import logging

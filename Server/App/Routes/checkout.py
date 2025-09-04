@@ -2,9 +2,9 @@
 from fastapi import APIRouter, HTTPException,Depends
 from pydantic import BaseModel, EmailStr, constr
 from typing import List, Optional
-from Utils.dependencies import get_current_user
+from App.Utils.dependencies import get_current_user
 from mysql.connector import Error
-from DB.connection import get_connection  # your existing DB connection function
+from App.DB.connection import get_connection  # your existing DB connection function
 
 router = APIRouter(prefix="/order", tags=["Orders"])
 
