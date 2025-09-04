@@ -1,5 +1,6 @@
 // src/context/CarouselContext.tsx
 import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 interface Slide {
   id: number;
@@ -19,7 +20,7 @@ const CarouselContext = createContext<CarouselContextType>({
   fetchSlides: async () => {},
 });
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = getApiBaseUrl();
 
 export const CarouselProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [slides, setSlides] = useState<Slide[]>([]);

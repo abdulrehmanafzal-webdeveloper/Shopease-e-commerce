@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useCallback } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 // ---- Types ----
 interface OrderItem {
@@ -43,6 +44,8 @@ export const CheckoutProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const API_BASE = getApiBaseUrl();
+  
   const [formData, setFormDataState] = useState<CheckoutFormData>({
     id: 0,
     user_email: "",
@@ -108,7 +111,7 @@ export const CheckoutProvider = ({
       localStorage.setItem("guest_email", data.user_email);
 
       try {
-        const res = await fetch("http://localhost:8000/order/create", {
+        const res = await fetch(`${API_BASE}/order/create`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...data, items }),
@@ -149,7 +152,7 @@ export const CheckoutProvider = ({
         return [];
       }
 
-      const res = await fetch(`http://localhost:8000/order/orders/${email}`);
+      const res = await fetch(`${API_BASE}/order/orders/${email}`);
 
       if (!res.ok) {
         const errorText = await res.text();

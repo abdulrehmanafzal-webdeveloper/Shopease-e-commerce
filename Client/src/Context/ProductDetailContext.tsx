@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 export type Product = {
   product_id: number;
@@ -30,7 +31,7 @@ const ProductDetailContext = createContext<ProductDetailContextType>({
   fetchSingleProduct:async () => {},
 });
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = getApiBaseUrl();
 
 export const ProductDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

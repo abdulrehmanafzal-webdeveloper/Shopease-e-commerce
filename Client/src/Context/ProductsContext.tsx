@@ -1,5 +1,6 @@
 
-import React, { createContext, useContext, useState, useCallback, startTransition } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 export interface Product {
   product_id: number;
@@ -134,9 +135,10 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
   // Get token for authorization
   const getToken = () => localStorage.getItem("token");
 
-  const CATEGORY_BASE = "http://127.0.0.1:8000/categories";
-  const PRODUCT_BASE = "http://127.0.0.1:8000/products";
-  const ORDERS_BASE = "http://127.0.0.1:8000/order";
+  const API_BASE = getApiBaseUrl();
+  const CATEGORY_BASE = `${API_BASE}/categories`;
+  const PRODUCT_BASE = `${API_BASE}/products`;
+  const ORDERS_BASE = `${API_BASE}/order`;
 
   // Fetch homepage dynamic sections
   const fetchHomeSections = useCallback(async () => {

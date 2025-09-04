@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import { useAlert } from "./Alert_context";
 import type { ReactNode } from "react";
+import { getApiBaseUrl } from "../utils/api";
 
 export interface CartItem {
   cart_product_id: number;
@@ -28,12 +29,13 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const API_BASE = getApiBaseUrl();
   const { showAlert } = useAlert();
 
   // ------------------ Fetch Cart ------------------
   const fetchCart = useCallback(async (sessionId?: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cart/getcart?session_id=${sessionId || ""}`, {
+      const res = await fetch(`${API_BASE}/cart/getcart?session_id=${sessionId || ""}`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -48,7 +50,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // ------------------ Add to Cart ------------------
   const addToCart = useCallback(async (productId: number, quantity: number = 1, sessionId?: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cart/addcart?session_id=${sessionId || ""}`, {
+      const res = await fetch(`${API_BASE}/cart/addcart?session_id=${sessionId || ""}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +73,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (!removedItem) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cart/removecart/${productId}?session_id=${sessionId || ""}`, {
+      const res = await fetch(`${API_BASE}/cart/removecart/${productId}?session_id=${sessionId || ""}`, {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -112,7 +114,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
 
     try {
-      const url = `http://127.0.0.1:8000/cart/updatecart/${productId}?session_id=${sessionId || ''}&quantity=${quantity}`;
+      const url = `${API_BASE}/cart/updatecart/${productId}?session_id=${sessionId || ''}&quantity=${quantity}`;
       const res = await fetch(url, {
         method: "PUT",
         headers: {
@@ -149,7 +151,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // ------------------ Clear Cart ------------------
   const clearCart = useCallback(async (sessionId?: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/cart/clearcart?session_id=${sessionId || ""}`, {
+      const res = await fetch(`${API_BASE}/cart/clearcart?session_id=${sessionId || ""}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
