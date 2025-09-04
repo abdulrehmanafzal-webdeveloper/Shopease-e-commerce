@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from Utils.security import SECRET_KEY, ALGORITHM
+from App.Utils.security import SECRET_KEY, ALGORITHM
 from DB.connection import get_connection
 
 
