@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 import logging
 
 # Routers
-from Routes import users, products, cart, checkout, categories
+from App.Routes import users, products, cart, checkout, categories
 
 # ------------------ App Setup ------------------
 app = FastAPI(title="E-commerce API", version="1.0.0")
