@@ -6,6 +6,7 @@ import { useCart } from "../Context/CartContext";
 import { useAlert } from "../Context/Alert_context";
 import { FiShoppingCart, FiAlertTriangle, FiLoader } from "react-icons/fi";
 import { IoEyeOutline } from "react-icons/io5";
+import { getApiBaseUrl } from "../utils/api";
 
 export type Product = {
   product_id: number;
@@ -138,9 +139,11 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         
         <motion.img
           src={
-            product.image_url.startsWith("http")
-              ? product.image_url
-              : `http://localhost:8000${product.image_url}`
+            product.image_url
+              ? product.image_url.startsWith("http")
+                ? product.image_url
+                : `${getApiBaseUrl}${product.image_url}`
+              : placeholderImage
           }
           onLoad={() => setIsImageLoaded(true)}
           onError={(e) => {

@@ -31,7 +31,7 @@ const ProductDetailContext = createContext<ProductDetailContextType>({
   fetchSingleProduct:async () => {},
 });
 
-const API_BASE = getApiBaseUrl();
+const API_BASE:string = getApiBaseUrl();
 
 export const ProductDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

@@ -7,6 +7,7 @@ const Categories = lazy(() => import("../components/Categories"));
 import ProductCarousel from "../components/ProductCarousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
+import { getApiBaseUrl } from "../utils/api";
 
 const placeholderImage =
   "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
@@ -252,7 +253,13 @@ const Home = () => {
                       </h2>
                       <div className="relative overflow-hidden rounded-xl shadow-lg aspect-w-4 aspect-h-5 bg-gray-100">
                         <motion.img
-                          src={section.image_url || placeholderImage}
+                          src={
+                            section.image_url
+                              ? section.image_url.startsWith("http")
+                                ? section.image_url
+                                : `${getApiBaseUrl}${section.image_url}`
+                              : placeholderImage
+                          }
                           alt={section.name}
                           className="w-full h-64 sm:h-80 md:h-72 lg:h-80 object-cover cursor-pointer"
                           onClick={() =>

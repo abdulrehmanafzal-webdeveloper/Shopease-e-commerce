@@ -17,6 +17,8 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 
+import { getApiBaseUrl } from "../utils/api";
+
 interface Order {
   id: number;
   user_email: string;
@@ -57,16 +59,18 @@ export default function Orders() {
 
       try {
         const email = localStorage.getItem("guest_email");
-        
+
         if (email) {
           const data = await fetchOrders();
-          
+
           // Check if there are orders with zero items
-          const hasEmptyOrders = data.some(order => order.items.length === 0);
+          const hasEmptyOrders = data.some((order) => order.items.length === 0);
           setHasOrdersWithZeroItems(hasEmptyOrders && data.length > 0);
-          
+
           // Filter out orders with zero items - we only want to display orders that have at least one item
-          const ordersWithItems = data.filter(order => order.items.length > 0);
+          const ordersWithItems = data.filter(
+            (order) => order.items.length > 0
+          );
           setOrders(ordersWithItems);
         }
       } catch (error) {
@@ -87,7 +91,7 @@ export default function Orders() {
           </div>
           <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((item) => (
             <motion.div
@@ -107,8 +111,11 @@ export default function Orders() {
                   <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 mt-3">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="flex flex-col items-center text-center p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/50">
+                  {[1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="flex flex-col items-center text-center p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/50"
+                    >
                       <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-lg mb-2"></div>
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-1"></div>
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
@@ -123,9 +130,9 @@ export default function Orders() {
                   <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-2"></div>
                   <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
                 </div>
-                
+
                 <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-                
+
                 <div className="space-y-3">
                   {[1, 2].map((i) => (
                     <div key={i} className="flex items-center gap-4 p-2">
@@ -186,9 +193,9 @@ export default function Orders() {
           No Orders Found
         </h2>
         <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md">
-          {hasOrdersWithZeroItems ? 
-            "You have orders in the system, but none contain any items." : 
-            "It looks like you haven't placed any orders yet. Start shopping to see your orders here!"}
+          {hasOrdersWithZeroItems
+            ? "You have orders in the system, but none contain any items."
+            : "It looks like you haven't placed any orders yet. Start shopping to see your orders here!"}
         </p>
         <motion.button
           whileHover={{
@@ -240,7 +247,7 @@ export default function Orders() {
             0
           );
           const isExpanded = expandedOrder === order.id;
-          
+
           // Show first 2 items in preview, only show remaining items in expanded view
           const previewItems = order.items.slice(0, 2);
           const remainingItems = order.items.slice(2);
@@ -415,11 +422,12 @@ export default function Orders() {
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                      <FaShoppingBag className="text-indigo-500 text-sm" /> 
+                      <FaShoppingBag className="text-indigo-500 text-sm" />
                       Items
                     </h3>
                     <span className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded-full">
-                      {order.items.length} item{order.items.length > 1 ? "s" : ""}
+                      {order.items.length} item
+                      {order.items.length > 1 ? "s" : ""}
                     </span>
                   </div>
                   <ul className="space-y-4">
@@ -439,7 +447,13 @@ export default function Orders() {
                             className="relative min-w-[4rem] w-16 h-16 sm:w-20 sm:h-20 bg-white"
                           >
                             <img
-                              src={item.image_url}
+                              src={
+                                item.image_url
+                                  ? item.image_url.startsWith("http")
+                                    ? item.image_url
+                                    : `${getApiBaseUrl}${item.image_url}`
+                                  : "/placeholder.png" // fallback if undefined
+                              }
                               alt={item.product_name}
                               className="w-full h-full object-contain rounded-lg border border-gray-200 shadow-sm"
                               loading="lazy"
@@ -483,7 +497,10 @@ export default function Orders() {
                       whileTap={{ scale: 0.98 }}
                       className="w-full mt-4 text-center text-sm text-indigo-600 dark:text-indigo-400 py-2 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 border border-indigo-200 dark:border-indigo-800/30"
                     >
-                      <span>View {remainingItems.length} more item{remainingItems.length > 1 ? "s" : ""}</span>
+                      <span>
+                        View {remainingItems.length} more item
+                        {remainingItems.length > 1 ? "s" : ""}
+                      </span>
                       <FaChevronDown className="text-xs" />
                     </motion.button>
                   )}
@@ -500,7 +517,8 @@ export default function Orders() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                      <FaInfoCircle className="text-indigo-500" /> Additional Items
+                      <FaInfoCircle className="text-indigo-500" /> Additional
+                      Items
                     </h3>
                     <button
                       onClick={() => setExpandedOrder(null)}
@@ -522,7 +540,13 @@ export default function Orders() {
                         {item.image_url ? (
                           <div className="min-w-[4rem] w-16 h-16 sm:w-20 sm:h-20 relative">
                             <img
-                              src={item.image_url}
+                              src={
+                                item.image_url
+                                  ? item.image_url.startsWith("http")
+                                    ? item.image_url
+                                    : `${getApiBaseUrl}${item.image_url}`
+                                  : "/placeholder.png" // fallback if undefined
+                              }
                               alt={item.product_name}
                               className="w-full h-full object-contain rounded-lg border border-gray-200 bg-white"
                               loading="lazy"
@@ -539,7 +563,7 @@ export default function Orders() {
                             </div>
                           </div>
                         )}
-                        
+
                         <div className="flex-1">
                           <p className="font-medium text-sm sm:text-base text-gray-800 dark:text-white line-clamp-2">
                             {item.product_name}

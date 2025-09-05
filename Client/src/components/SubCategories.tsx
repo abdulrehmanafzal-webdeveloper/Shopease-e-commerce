@@ -11,6 +11,7 @@ export interface SubCategory {
   category_id: number;
   category_url: string;
 }
+import { getApiBaseUrl } from "../utils/api";
 
 const placeholderHero =
   "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
@@ -70,8 +71,12 @@ const SubCategories: React.FC = () => {
   // hero image: prefer a category-level banner if available; otherwise fall back
   const heroImage =
     items.length > 0
-      ? // sometimes backends return category image inside subcat; try to use it
-        (items[0] as any).category_url || items[0].image_url || placeholderHero
+      ? (items[0] as any).category_url ||
+        (items[0].image_url
+          ? items[0].image_url.startsWith("http")
+            ? items[0].image_url
+            : `${getApiBaseUrl}${items[0].image_url}`
+          : placeholderHero)
       : placeholderHero;
 
   const categoryTitle =
@@ -135,8 +140,7 @@ const SubCategories: React.FC = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-              >
-              </motion.h1>
+              ></motion.h1>
 
               <motion.div
                 className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-orange-500"
@@ -277,7 +281,13 @@ const SubCategories: React.FC = () => {
                       )}
 
                       <motion.img
-                        src={subcat.image_url || placeholderThumb}
+                        src={
+                          subcat.image_url
+                            ? subcat.image_url.startsWith("http")
+                              ? subcat.image_url
+                              : `${getApiBaseUrl}${subcat.image_url}`
+                            : placeholderThumb
+                        }
                         alt={subcat.name}
                         className={`w-full h-full object-cover transition-all duration-500 ${
                           isLoaded ? "opacity-100" : "opacity-0"

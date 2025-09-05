@@ -6,7 +6,7 @@ import { useCart } from "../Context/CartContext";
 import { CreditCard, Lock, Mail, MapPin, Phone, ShoppingCart, Truck, Wallet } from "lucide-react";
 import { useAlert } from "../Context/Alert_context";
 import { useAuth } from "../Context/AuthContext";
-
+import { getApiBaseUrl } from "../utils/api";
 // ---- Types ----
 interface CheckoutFormInputs {
   user_email: string;
@@ -161,7 +161,13 @@ const Checkout: React.FC = () => {
                         whileHover={{ rotate: 1, scale: 1.05 }}
                       >
                         <motion.img
-                          src={item.image_url}
+                          src={
+                            item.image_url
+                              ? item.image_url.startsWith("http")
+                                ? item.image_url
+                                : `${getApiBaseUrl}${item.image_url}`
+                              : "/placeholder.png"
+                          }
                           alt={item.name}
                           className="w-16 h-16 object-cover"
                           whileHover={{ scale: 1.1 }}

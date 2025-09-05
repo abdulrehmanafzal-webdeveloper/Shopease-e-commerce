@@ -12,6 +12,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
+import { getApiBaseUrl } from "../utils/api";
 import { useCart, type CartItem } from "../Context/CartContext";
 import { useAuth } from "../Context/AuthContext";
 import { useAlert } from "../Context/Alert_context";
@@ -550,7 +551,7 @@ const Navbar: React.FC = () => {
                               item.image_url
                                 ? item.image_url.startsWith("http")
                                   ? item.image_url
-                                  : `http://localhost:8000${item.image_url}`
+                                  : `${getApiBaseUrl}${item.image_url}`
                                 : "/placeholder.png" // fallback if undefined
                             }
                             alt={item.name}
