@@ -6,6 +6,7 @@ import { useProductDetail } from "../Context/ProductDetailContext";
 import { useCart } from "../Context/CartContext";
 import { useAuth } from "../Context/AuthContext";
 import { useAlert } from "../Context/Alert_context";
+import { getApiBaseUrl } from "../utils/api";
 
 const placeholderImage = "https://via.placeholder.com/500x500?text=Loading+Product";
 
@@ -270,7 +271,7 @@ const ProductDetail = () => {
               <img
                 src={(selectedImage || product.image_url)?.startsWith("http")
                   ? selectedImage || product.image_url
-                  : `http://localhost:8000${selectedImage || product.image_url}`
+                  : `${getApiBaseUrl}${selectedImage || product.image_url}`
                 }
                 alt={product.product_name || "Product Image"}
                 style={zoomStyle}
@@ -305,13 +306,13 @@ const ProductDetail = () => {
               {[
                 product.image_url.startsWith("http")
                   ? product.image_url
-                  : `http://localhost:8000${product.image_url}`,
+                  : `${getApiBaseUrl}${product.image_url}`,
                 product.image_url.startsWith("http")
                   ? product.image_url
-                  : `http://localhost:8000${product.image_url}`,
+                  : `${getApiBaseUrl}${product.image_url}`,
                 product.image_url.startsWith("http")
                   ? product.image_url
-                  : `http://localhost:8000${product.image_url}`,
+                  : `${getApiBaseUrl}${product.image_url}`,
               ].map((img, idx) => (
                 <motion.div
                   key={idx}
@@ -513,7 +514,13 @@ const ProductDetail = () => {
                   >
                     <div className="relative pt-[100%] bg-gray-50">
                       <img
-                        src={rp.image_url || placeholderImage}
+                        src={
+                          rp.image_url
+                            ? rp.image_url.startsWith("http")
+                              ? rp.image_url
+                              : `${getApiBaseUrl}${rp.image_url}`
+                            : placeholderImage
+                        }
                         alt={rp.product_name}
                         className="absolute top-0 left-0 w-full h-full object-contain p-3 hover:scale-105 transition-transform duration-300"
                         loading="lazy"
