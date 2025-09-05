@@ -13,17 +13,18 @@ app = FastAPI(title="E-commerce API", version="1.0.0")
 
 # CORS middleware
 origins = [
-    "http://localhost:5173",       
-    "https://shopease-e-commerce.vercel.app",  # ✅ no trailing slash
+    "http://localhost:5173",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ------------------ Serve Uploaded Files ------------------
 # Make sure "uploads" folder exists in your project root
