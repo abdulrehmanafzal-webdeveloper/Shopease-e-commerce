@@ -4,6 +4,7 @@
 export const getApiBaseUrl = (): string => {
   // First check for the environment variable
   const envApiUrl = import.meta.env.VITE_API_URL;
+  console.log(envApiUrl);
   
   if (envApiUrl) {
     return envApiUrl;
