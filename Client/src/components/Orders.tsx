@@ -451,7 +451,7 @@ export default function Orders() {
                                 item.image_url
                                   ? item.image_url.startsWith("http")
                                     ? item.image_url
-                                    : `${getApiBaseUrl}${item.image_url}`
+                                    : `${getApiBaseUrl()}${item.image_url}`
                                   : "/placeholder.png" // fallback if undefined
                               }
                               alt={item.product_name}
@@ -544,7 +544,7 @@ export default function Orders() {
                                 item.image_url
                                   ? item.image_url.startsWith("http")
                                     ? item.image_url
-                                    : `${getApiBaseUrl}${item.image_url}`
+                                    : `${getApiBaseUrl()}${item.image_url}`
                                   : "/placeholder.png" // fallback if undefined
                               }
                               alt={item.product_name}

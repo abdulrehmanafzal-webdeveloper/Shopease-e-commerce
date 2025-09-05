@@ -2,6 +2,7 @@ import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { type CategorySection } from "../Context/ProductsContext";
+import { getApiBaseUrl } from "../utils/api";
 
 interface CategoriesProps {
   loading: boolean;
@@ -112,7 +113,7 @@ const Categories = ({ loading, categories, placeholderImage }: CategoriesProps) 
                       <div className="bg-white rounded-xl p-2 shadow-md mb-4 w-full overflow-hidden">
                         <div className="relative overflow-hidden rounded-lg aspect-w-4 aspect-h-3">
                           <img
-                            src={cat.banner_url || placeholderImage}
+                            src={cat.banner_url?cat.banner_url.startsWith("http") ? cat.banner_url : `${getApiBaseUrl()}${cat.banner_url}` : placeholderImage}
                             alt={cat.name}
                             className="w-full h-48 sm:h-52 md:h-44 object-cover hover:scale-110 transition-transform duration-500 rounded-lg"
                             onError={(e) =>

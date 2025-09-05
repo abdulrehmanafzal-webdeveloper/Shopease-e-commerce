@@ -19,6 +19,7 @@ import {
   FaSort,
 } from "react-icons/fa";
 import { type Order } from "../Context/ProductsContext";
+import { getApiBaseUrl } from "../utils/api";
 
 export default memo(function AdminOrders() {
   
@@ -464,7 +465,7 @@ export default memo(function AdminOrders() {
                           <div className="min-w-[4rem] w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 relative overflow-hidden">
                             {item.image_url ? (
                               <img
-                                src={item.image_url}
+                                src={item.image_url.startsWith("http") ? item.image_url : `${getApiBaseUrl()}${item.image_url}`}
                                 alt={item.product_name}
                                 className="w-full h-full object-cover rounded-lg absolute inset-0"
                                 loading="lazy"
@@ -543,7 +544,7 @@ export default memo(function AdminOrders() {
                             <div className="min-w-[3.5rem] w-14 h-14 sm:w-16 sm:h-16 bg-gray-200 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-400 relative overflow-hidden">
                               {item.image_url ? (
                                 <img
-                                  src={item.image_url}
+                                  src={item.image_url?.startsWith("http") ? item.image_url : `${getApiBaseUrl()}${item.image_url}`}
                                   alt={item.product_name}
                                   className="w-full h-full object-cover rounded-lg absolute inset-0"
                                   loading="lazy"

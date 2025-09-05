@@ -165,7 +165,7 @@ const Checkout: React.FC = () => {
                             item.image_url
                               ? item.image_url.startsWith("http")
                                 ? item.image_url
-                                : `${getApiBaseUrl}${item.image_url}`
+                                : `${getApiBaseUrl()}${item.image_url}`
                               : "/placeholder.png"
                           }
                           alt={item.name}

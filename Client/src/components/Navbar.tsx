@@ -551,7 +551,7 @@ const Navbar: React.FC = () => {
                               item.image_url
                                 ? item.image_url.startsWith("http")
                                   ? item.image_url
-                                  : `${getApiBaseUrl}${item.image_url}`
+                                  : `${getApiBaseUrl()}${item.image_url}`
                                 : "/placeholder.png" // fallback if undefined
                             }
                             alt={item.name}

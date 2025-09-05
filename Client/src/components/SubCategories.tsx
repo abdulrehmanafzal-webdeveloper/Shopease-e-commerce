@@ -75,7 +75,7 @@ const SubCategories: React.FC = () => {
         (items[0].image_url
           ? items[0].image_url.startsWith("http")
             ? items[0].image_url
-            : `${getApiBaseUrl}${items[0].image_url}`
+            : `${getApiBaseUrl()}${items[0].image_url}`
           : placeholderHero)
       : placeholderHero;
 
@@ -285,7 +285,7 @@ const SubCategories: React.FC = () => {
                           subcat.image_url
                             ? subcat.image_url.startsWith("http")
                               ? subcat.image_url
-                              : `${getApiBaseUrl}${subcat.image_url}`
+                              : `${getApiBaseUrl()}${subcat.image_url}`
                             : placeholderThumb
                         }
                         alt={subcat.name}

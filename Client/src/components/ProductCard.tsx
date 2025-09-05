@@ -142,7 +142,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
             product.image_url
               ? product.image_url.startsWith("http")
                 ? product.image_url
-                : `${getApiBaseUrl}${product.image_url}`
+                : `${getApiBaseUrl()}${product.image_url}`
               : placeholderImage
           }
           onLoad={() => setIsImageLoaded(true)}

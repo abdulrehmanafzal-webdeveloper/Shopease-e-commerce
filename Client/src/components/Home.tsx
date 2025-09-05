@@ -257,7 +257,7 @@ const Home = () => {
                             section.image_url
                               ? section.image_url.startsWith("http")
                                 ? section.image_url
-                                : `${getApiBaseUrl}${section.image_url}`
+                                : `${getApiBaseUrl()}${section.image_url}`
                               : placeholderImage
                           }
                           alt={section.name}

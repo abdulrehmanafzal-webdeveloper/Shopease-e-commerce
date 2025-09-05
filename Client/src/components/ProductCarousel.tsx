@@ -83,7 +83,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   product.image_url?
                   product.image_url.startsWith("http")
                     ? product.image_url
-                    : `${getApiBaseUrl}${product.image_url}`
+                    : `${getApiBaseUrl()}${product.image_url}`
                     :""
                 }
                 alt={product.product_name}

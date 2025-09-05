@@ -1635,7 +1635,7 @@ const Profile: React.FC = () => {
                                     category.banner_url
                                       ? category.banner_url.startsWith("http")
                                         ? category.banner_url
-                                        : `${getApiBaseUrl}${category.banner_url}`
+                                        : `${getApiBaseUrl()}${category.banner_url}`
                                       : ""
                                   }
                                   alt={category.name}
@@ -1755,7 +1755,7 @@ const Profile: React.FC = () => {
                                     // do the same thing for this src attribute as we done on top
                                       src={subcategory.image_url?subcategory.image_url.startsWith("http")
                                         ? subcategory.image_url
-                                        : `${getApiBaseUrl}${subcategory.image_url}`:""}
+                                        : `${getApiBaseUrl()}${subcategory.image_url}`:""}
                                       alt={subcategory.name}
                                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                       loading="lazy"
@@ -2094,7 +2094,7 @@ const Profile: React.FC = () => {
                                   src={
                                     product.image_url.startsWith("http")
                                       ? product.image_url
-                                      : `${getApiBaseUrl}${product.image_url}`
+                                      : `${getApiBaseUrl()}${product.image_url}`
                                   }
                                   alt={product.name}
                                   className="w-16 h-16 rounded-lg object-cover ml-3 shadow-md"
@@ -2204,7 +2204,7 @@ const Profile: React.FC = () => {
                                   src={
                                     product.image_url.startsWith("http")
                                       ? product.image_url
-                                      : `${getApiBaseUrl}${product.image_url}`
+                                      : `${getApiBaseUrl()}${product.image_url}`
                                   }
                                   alt={product.product_name}
                                   className="w-16 h-16 rounded-lg object-cover mr-3 shadow-md"

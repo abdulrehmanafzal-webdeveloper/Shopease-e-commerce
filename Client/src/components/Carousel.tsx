@@ -2,6 +2,7 @@ import { useState, useEffect, memo, useRef } from "react";
 import { motion, AnimatePresence, useAnimation,type Variant } from "framer-motion";
 import { useProducts } from "../Context/ProductsContext";
 import { FaChevronLeft, FaChevronRight, FaPlay, FaPause } from "react-icons/fa";
+import { getApiBaseUrl } from "../utils/api";
 
 const placeholderImage = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
@@ -41,7 +42,7 @@ const Carousel: React.FC = () => {
     slides.forEach((slide, idx) => {
       if (!slide.image_url) return;
       const img = new Image();
-      img.src = slide.image_url;
+      img.src = slide.image_url?slide.image_url.startsWith("http") ? slide.image_url : `${getApiBaseUrl()}${slide.image_url}`:placeholderImage;
       img.onload = () => setLoadedImages((prev) => ({ ...prev, [idx]: true }));
     });
   }, [slides]);
