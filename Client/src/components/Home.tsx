@@ -1,9 +1,9 @@
-import { useEffect, memo, useState, lazy, Suspense } from "react";
+import { useEffect, memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../Context/ProductsContext";
 import Carousel from "../components/Carousel";
-const Categories = lazy(() => import("../components/Categories"));
+import Categories from "../components/Categories";
 import ProductCarousel from "../components/ProductCarousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFireFlameCurved } from "@fortawesome/free-solid-svg-icons";
@@ -163,13 +163,11 @@ const Home = () => {
       </motion.div>
 
       {/* ================= CATEGORY GRID ================= */}
-      <Suspense fallback={<div>Loading categories...</div>}>
         <Categories
           loading={loading}
           categories={categories}
           placeholderImage={placeholderImage}
         />
-      </Suspense>
       {/* ================= SUBCATEGORY SECTIONS ================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16 bg-gray-50">
         <motion.div
